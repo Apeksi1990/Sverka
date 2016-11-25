@@ -5,6 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -110,10 +111,14 @@ public class SverkaTest {
                                 holdAll.add(myText2, BorderLayout.EAST);
                                 myText2.setLineWrap(true);
                                 myText1.setLineWrap(true);
+                                myText2.setBorder(BorderFactory.createLineBorder(Color.black));
+                                myText1.setBorder(BorderFactory.createLineBorder(Color.black));
 
-                                topPanel.setLayout(new GridLayout());
-                                topPanel.add(sp1);
-                                topPanel.add(sp2);
+                                sp1.setPreferredSize(new Dimension(277,25));
+                                sp2.setPreferredSize(new Dimension(277,25));
+                                topPanel.setLayout(new BorderLayout());
+                                topPanel.add(sp1, BorderLayout.WEST);
+                                topPanel.add(sp2, BorderLayout.EAST);
                                 sp1.setHorizontalAlignment(SwingConstants.CENTER);
                                 sp2.setHorizontalAlignment(SwingConstants.CENTER);
                                 sp1.setFont(new Font("Serif", Font.BOLD, 16));
@@ -121,15 +126,12 @@ public class SverkaTest {
 
 
                                 JSplitPane splitVertical = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-                                splitVertical.setTopComponent   (holdAll);
+                                splitVertical.setTopComponent(holdAll);
                                 splitVertical.setBottomComponent(bottomPanel);
                                 splitVertical.setDividerLocation(350);
 
-
                                 Glavnoe.setLayout(new BorderLayout());
                                 Glavnoe.add(topPanel, BorderLayout.NORTH);
-                                //Glavnoe.add(holdAll, BorderLayout.CENTER);
-                                //Glavnoe.add(bottomPanel, BorderLayout.SOUTH);
                                 Glavnoe.add(splitVertical, BorderLayout.CENTER);
 
                                 InputStream ExcelFileToRead = new FileInputStream(file);
@@ -246,10 +248,8 @@ public class SverkaTest {
 
                                 scroll = new JScrollPane(holdAll);
                                 scroll.setBackground(Color.white);
-                                //scroll.setPreferredSize(new Dimension(300, 300));
                                 scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                                 scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-                                //Glavnoe.add(scroll);
                                 splitVertical.add(scroll);
 
                                 scrFin = new JScrollPane(finS);
