@@ -10,6 +10,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,12 +29,12 @@ public class SverkaTest {
 
 
     public SverkaTest(){
-        JFrame jfr = new JFrame("Сверка 1.2 Test");
+        JFrame jfr = new JFrame("Сверка 1.3 Test");
         jfr.setVisible(true);
         jfr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfr.setSize(700, 750);
         jfr.setLocation(600, 200);
-        //jfr.setResizable(false);
+        jfr.setResizable(false);
         jfr.setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel();
@@ -43,7 +45,6 @@ public class SverkaTest {
         final JTabbedPane tabbPane = new JTabbedPane();
 
         final JButton fileS = new JButton("Выбрать файл");
-
 
         topPanel.add(fileS, BorderLayout.CENTER);
         //topPanel.add(exlBut, BorderLayout.CENTER);
@@ -111,8 +112,8 @@ public class SverkaTest {
                                 holdAll.add(myText2, BorderLayout.EAST);
                                 myText2.setLineWrap(true);
                                 myText1.setLineWrap(true);
-                                myText2.setBorder(BorderFactory.createLineBorder(Color.black));
-                                myText1.setBorder(BorderFactory.createLineBorder(Color.black));
+                                myText2.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                                myText1.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
                                 sp1.setPreferredSize(new Dimension(277,25));
                                 sp2.setPreferredSize(new Dimension(277,25));
