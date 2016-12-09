@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -24,8 +25,10 @@ public class SverkaTest {
     ArrayList<String> dList = new ArrayList<>();
     ArrayList<String> arr;
     ArrayList<String> erSp;
-    //ImageIcon tabIcon = new ImageIcon("src/InfoGorod/images/iconG.png"); // "src/InfoGorod/images/iconG.png"
     //ArrayList<String> vigruzka = new ArrayList<>();
+    String path = "images/iconG.png";
+    URL imgURL = SverkaTest.class.getResource(path);
+    ImageIcon tabIcon = new ImageIcon(imgURL);
 
 
     public SverkaTest(){
@@ -232,7 +235,7 @@ public class SverkaTest {
                                                 finS.setText("Требуется заблокировать пользователей:\n\n" + sb.toString() +
                                                     "\n" + "______________\n" + "Есть в списках, но нет в базе:\n\n" + erSps );
                                             finS.setCaretPosition(0);
-                                            //tabbPane.setIconAt(finalT, tabIcon);
+                                            tabbPane.setIconAt(finalT, tabIcon);
                                             tabbPane.setForegroundAt(finalT, Color.LIGHT_GRAY);
 
                                             //vigruzka.add(sb.toString() + "\n");
