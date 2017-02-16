@@ -12,10 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,10 +22,11 @@ public class SverkaTest {
     ArrayList<String> dList = new ArrayList<>();
     ArrayList<String> arr;
     ArrayList<String> erSp;
-    //ArrayList<String> vigruzka = new ArrayList<>();
+    ArrayList<String> vigruzka = new ArrayList<>();
     String path = "images/iconG.png";
     URL imgURL = SverkaTest.class.getResource(path);
     ImageIcon tabIcon = new ImageIcon(imgURL);
+    File sverkaLog = new File("SverkaLog.txt");
 
 
     public SverkaTest(){
@@ -48,9 +46,10 @@ public class SverkaTest {
         final JTabbedPane tabbPane = new JTabbedPane();
 
         final JButton fileS = new JButton("Выбрать файл");
+        JButton exlBut = new JButton("Выгрузить список");
 
         topPanel.add(fileS, BorderLayout.CENTER);
-        //topPanel.add(exlBut, BorderLayout.CENTER);
+        topPanel.add(exlBut, BorderLayout.CENTER);
         centerPanel.add(tabbPane, BorderLayout.CENTER);
         jfr.add(topPanel, BorderLayout.NORTH);
         jfr.add(centerPanel, BorderLayout.CENTER);
@@ -82,7 +81,7 @@ public class SverkaTest {
                             dList = dm.getDomenName();
                             for (int t=0; t<dList.size(); t++){
 
-                                String thisDom;
+                                final String thisDom;
                                 thisDom = dList.get(t);
                                 ArrayList<String> firstCol = new ArrayList<>();
                                 JPanel Glavnoe = new JPanel();
@@ -229,16 +228,22 @@ public class SverkaTest {
                                                 erSps.append(s);
                                             }
 
-                                            if (erSp.size() == 0)
+                                            if (erSp.size() == 0) {
                                                 finS.setText("Требуется заблокировать пользователей:\n\n" + sb.toString());
-                                            else
+                                                vigruzka.add("Домен " + thisDom + "\r\n");
+                                                vigruzka.add(sb.toString() + "\n");
+                                            }
+                                            else {
                                                 finS.setText("Требуется заблокировать пользователей:\n\n" + sb.toString() +
-                                                    "\n" + "______________\n" + "Есть в списках, но нет в базе:\n\n" + erSps );
+                                                        "\n" + "______________\n" + "Есть в списках, но нет в базе:\n\n" + erSps );
+                                                vigruzka.add("Домен " + thisDom + "\r\n");
+                                                vigruzka.add(sb.toString() + "\n");
+                                                vigruzka.add("Есть в списках, но нет в базе:" + "\r\n");
+                                                vigruzka.add(erSps.toString());
+                                            }
                                             finS.setCaretPosition(0);
                                             tabbPane.setIconAt(finalT, tabIcon);
                                             tabbPane.setForegroundAt(finalT, Color.LIGHT_GRAY);
-
-                                            //vigruzka.add(sb.toString() + "\n");
                                         }
                                     }
                                 });
@@ -271,17 +276,26 @@ public class SverkaTest {
             }
         });
 
-        /*JButton exlBut = new JButton("Выгрузить список");
         exlBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 StringBuilder vig = new StringBuilder();
-                for (String s : vigruzka) {
+                /*for (String s : vigruzka) {
                     vig.append(s);
                 }
-                System.out.println(vig.toString());
+                System.out.println(vig.toString());*/
+                try (RandomAccessFile raf = new RandomAccessFile(sverkaLog, "rw")){
+                    for (String s : vigruzka) {
+                        raf.write(s.getBytes());
+                        //raf.writeUTF("\r\n");
+                    }
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
-        });*/
+        });
     }
 
     public static void main(String[] args) { new SverkaTest(); }
