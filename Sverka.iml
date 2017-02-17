@@ -12,5 +12,7 @@
     <orderEntry type="library" name="commons-collections4-4.0" level="project" />
     <orderEntry type="library" name="poi-ooxml-3.15" level="project" />
     <orderEntry type="library" name="tinylaf-1_4_0" level="project" />
+    <orderEntry type="library" name="xmlbeans-2.6.0" level="project" />
+    <orderEntry type="library" name="commons-collections4-4.1" level="project" />
   </component>
 </module>
