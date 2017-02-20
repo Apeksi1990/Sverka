@@ -14,12 +14,12 @@ public class Sverka {
 
     private ArrayList<String> dList = new ArrayList<>();
     private ArrayList<String> vigruzka = new ArrayList<>();
-    private String computername= InetAddress.getLocalHost().getHostName();
+    private String computerName = InetAddress.getLocalHost().getHostName();
     private File sverkaLog;
 
 
     public Sverka() throws UnknownHostException {
-        JFrame jfr = new JFrame("Сверка 1.4");
+        final JFrame jfr = new JFrame("Сверка 1.4");
         jfr.setVisible(true);
         jfr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jfr.setSize(700, 750);
@@ -53,8 +53,8 @@ public class Sverka {
                         } else {
                             logFile = fileName.substring(0, fileName.length() - 5);
                         }
-                        sverkaLog = new File("SverkaLog_" + logFile + "_" + computername + ".doc");
-
+                        jfr.setTitle(logFile);
+                        sverkaLog = new File("SverkaLog_" + logFile + "_" + computerName + ".doc");
                         Action action = new ActionForSverka(dList, vigruzka, tabbPane, file);
                         action.action();
                     } else {
