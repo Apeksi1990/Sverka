@@ -7,40 +7,51 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 public class Sverka implements Action {
 
     private ArrayList<String> dList;
-    private ArrayList<String> arr;
-    private ArrayList<String> erSp;
-    private ArrayList<String> vigruzka;
     private File file;
     private JTabbedPane tabbPane;
+    private File sverkaLog;
 
-    public Sverka(ArrayList<String> dList, ArrayList<String> vigruzka, JTabbedPane tabbPane, File file) {
+    private RandomAccessFile raf;
+
+    public Sverka(ArrayList<String> dList, JTabbedPane tabbPane, File file, File sverkaLog) {
         this.dList = dList;
-        this.vigruzka = vigruzka;
         this.tabbPane = tabbPane;
         this.file = file;
+        this.sverkaLog = sverkaLog;
     }
 
     public void action() {
+        try {
+            raf = new RandomAccessFile(sverkaLog, "rw");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         try {
             DomenReadActionChoose dm = new DomenExcel(file);
             dm.choose();
             dm.action();
 
-            tabbPane.removeAll();
-            dList = dm.getDomenName();
-            for (int t=0; t<dList.size(); t++){
+            this.tabbPane.removeAll();
+            this.dList = dm.getDomenName();
+            for (int t=0; t<this.dList.size(); t++){
+                final ArrayList<String> vigruzka = new ArrayList<>();
+                final StringBuilder sb = new StringBuilder();
+                final StringBuilder erSps = new StringBuilder();
                 final String thisDom;
-                thisDom = dList.get(t);
+                thisDom = this.dList.get(t);
                 ArrayList<String> firstCol = new ArrayList<>();
                 JPanel Glavnoe = new JPanel();
                 JButton myButton = new JButton("Сравнить списки");
-                JButton vseOk = new JButton("Проверено");
+                final JButton vseOk = new JButton("Проверено");
+                final JButton addUserInFile = new JButton("Добавить в файл");
                 final JTextArea myText1 = new JTextArea(0, 25);
                 final JTextArea myText2 = new JTextArea(0, 25);
                 final JTextArea finS = new JTextArea("Тут будут пользователи на удаление", 15, 0);
@@ -52,11 +63,13 @@ public class Sverka implements Action {
                 JPanel topPanel = new JPanel();
                 JLabel sp1 = new JLabel("Cписки из базы");
                 JLabel sp2 = new JLabel("Cписки лиц допущенных");
-                arr = new ArrayList<>();
-                erSp = new ArrayList<>();
+                final ArrayList<String> removeUser = new ArrayList<>();
+                final ArrayList<String> extraUser = new ArrayList<>();
                 buttonPanel.setLayout(new FlowLayout());
                 buttonPanel.add(myButton);
                 buttonPanel.add(vseOk);
+                buttonPanel.add(addUserInFile);
+
                 bottomPanel.setLayout(new BorderLayout());
                 bottomPanel.add(buttonPanel, BorderLayout.NORTH);
                 bottomPanel.setBackground(Color.lightGray);
@@ -94,94 +107,49 @@ public class Sverka implements Action {
                 myText1.setCaretPosition(0);
 
                 final int finalT = t;
-                myButton.addActionListener(new ActionListener() {
 
+                //Сверка пользователей.
+                myButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getActionCommand().equals("Сравнить списки")) {
-                            arr.clear();
-                            String[] mT1 = myText1.getText().split("\n");
+                            Action algorithm = new Algorithm(removeUser, extraUser, sb, erSps, myText1, myText2, finS, tabbPane, finalT);
+                            algorithm.action();
+                        }
+                    }
+                });
 
-                            //замена 'ё' на 'е' в первой колонке
-                            for (int i=0; i<mT1.length; i++) {
-                                mT1[i] = mT1[i].replaceAll("   ", " ");
-                            }
-                            for (int i=0; i<mT1.length; i++) {
-                                mT1[i] = mT1[i].replaceAll("ё", "е");
-                            }
-                            for (int i=0; i<mT1.length; i++) {
-                                mT1[i] = mT1[i].replaceAll("  ", " ");
-                            }
-                            //замена 'ё' на 'е' во второй колонке
-                            String mT22 = myText2.getText();
-                            mT22 = mT22.replaceAll("   ", " ");
-                            String mT21 = mT22;
-                            mT21 = mT21.replaceAll("  ", " ");
-                            String mT2 = mT21;
-                            mT2 = mT2.replaceAll("ё", "е");
+                //Проверено.
+                vseOk.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tabbPane.setForegroundAt(finalT, Color.RED);
+                    }
+                });
 
-                            //сверка списков
-                            for (int x = 0; x < mT1.length; x++)
-                                if (!(mT2.indexOf(mT1[x]) != -1)) {
-                                    arr.add(mT1[x] + "\n");
-                                }
-                            StringBuilder sb = new StringBuilder();
-                            for (String s : arr) {
-                                sb.append(s);
-                            }
-
-                            //нет в базе
-                            erSp.clear();
-                            String[] mT3 = myText2.getText().split("\n");
-                            for (int i=0; i<mT3.length; i++) {
-                                mT3[i] = mT3[i].replaceAll("   ", " ");
-                            }
-                            for (int i=0; i<mT3.length; i++) {
-                                mT3[i] = mT3[i].replaceAll("ё", "е");
-                            }
-                            for (int i=0; i<mT3.length; i++) {
-                                mT3[i] = mT3[i].replaceAll("  ", " ");
-                            }
-                            for (int i=0; i<mT3.length; i++){
-                                mT3[i] = mT3[i].trim();
-                            }
-                            String mT41 = myText1.getText();
-                            mT41 = mT41.replaceAll("  ", " ");
-                            String mT4 = mT41;
-                            mT4 = mT4.replaceAll("ё", "е");
-                            for (int x = 0; x < mT3.length; x++){
-                                if (!(mT4.indexOf(mT3[x]) != -1)){
-                                    erSp.add(mT3[x] + "\n");
-                                }
-                            }
-                            StringBuilder erSps = new StringBuilder();
-                            for (String s : erSp) {
-                                erSps.append(s);
-                            }
-
-                            if (erSp.size() == 0) {
-                                finS.setText("Требуется заблокировать пользователей:\n\n" + sb.toString());
+                //Добавление пользователей в файл.
+                addUserInFile.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        vigruzka.clear();
+                        if (sb.length() != 0) {
+                            if (extraUser.size() == 0) {
                                 vigruzka.add("Домен " + thisDom + "\r\n");
                                 vigruzka.add(sb.toString() + "\n");
-                            }
-                            else {
-                                finS.setText("Требуется заблокировать пользователей:\n\n" + sb.toString() +
-                                        "\n" + "______________\n" + "Есть в списках, но нет в базе:\n\n" + erSps );
+                            } else {
                                 vigruzka.add("Домен " + thisDom + "\r\n");
                                 vigruzka.add(sb.toString() + "\n");
                                 vigruzka.add("Есть в списках, но нет в базе:" + "\r\n");
                                 vigruzka.add(erSps.toString());
                             }
-                            finS.setCaretPosition(0);
-                            tabbPane.setForegroundAt(finalT, Color.LIGHT_GRAY);
+                            for (String s : vigruzka) {
+                                try {
+                                    raf.write(s.getBytes());
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
                         }
-                    }
-                });
-
-                vseOk.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        tabbPane.setForegroundAt(finalT, Color.RED);
                     }
                 });
 
