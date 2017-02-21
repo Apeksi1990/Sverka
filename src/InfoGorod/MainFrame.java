@@ -14,7 +14,6 @@ public class MainFrame {
 
     private ArrayList<String> dList = new ArrayList<>();
     private String computerName = InetAddress.getLocalHost().getHostName();
-    private File sverkaLog;
 
     public MainFrame() throws UnknownHostException {
         final JFrame mainJFrame = new JFrame("Сверка 1.4");
@@ -41,20 +40,6 @@ public class MainFrame {
                 fileChoose.action();
             }
         });
-
-        /*JButton exlBut = new JButton("Выгрузить список");
-        exlBut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try (RandomAccessFile raf = new RandomAccessFile(sverkaLog, "rw")){
-                    for (String s : vigruzka) {
-                        raf.write(s.getBytes());
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });*/
 
         mainJFrame.add(topPanel, BorderLayout.NORTH);
         mainJFrame.add(centerPanel, BorderLayout.CENTER);

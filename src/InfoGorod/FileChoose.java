@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class FileChoose implements Action {
     private ArrayList<String> dList;
     private String computerName;
-    private File sverkaLog;
     private JTabbedPane tabbPane;
     private JFrame mainJFrame;
 
@@ -35,7 +34,7 @@ public class FileChoose implements Action {
                     logFile = fileName.substring(0, fileName.length() - 5);
                 }
                 this.mainJFrame.setTitle(logFile);
-                this.sverkaLog = new File("SverkaLog_" + logFile + "_" + this.computerName + ".doc");
+                File sverkaLog = new File("SverkaLog_" + logFile + "_" + this.computerName + ".doc");
                 Action action = new Sverka(this.dList, this.tabbPane, file, sverkaLog);
                 action.action();
             } else {
