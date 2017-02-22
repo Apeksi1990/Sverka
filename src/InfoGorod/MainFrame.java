@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class MainFrame {
 
-    private ArrayList<String> dList = new ArrayList<>();
     private String computerName = InetAddress.getLocalHost().getHostName();
 
     public MainFrame() throws UnknownHostException {
@@ -36,7 +35,7 @@ public class MainFrame {
         fileS.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FileChoose fileChoose = new FileChoose(dList, computerName, tabbPane, mainJFrame);
+                Action fileChoose = new FileChoose(computerName, tabbPane, mainJFrame);
                 fileChoose.action();
             }
         });

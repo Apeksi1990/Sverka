@@ -25,6 +25,7 @@ public class ReadExcel implements ReadFileChoose {
         this.thisDom = thisDom;
         this.file = file;
         ExcelFileToRead = new FileInputStream(file);
+        choose();
     }
 
     public void choose() throws IOException {

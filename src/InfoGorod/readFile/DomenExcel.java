@@ -18,6 +18,7 @@ public class DomenExcel implements DomenReadActionChoose {
 
     public DomenExcel(File file) throws IOException {
        this.file = file;
+       choose();
     }
 
     public void choose() throws IOException {

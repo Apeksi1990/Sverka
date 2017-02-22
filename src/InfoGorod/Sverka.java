@@ -14,15 +14,13 @@ import java.util.ArrayList;
 
 public class Sverka implements Action {
 
-    private ArrayList<String> dList;
     private File file;
     private JTabbedPane tabbPane;
     private File sverkaLog;
 
     private RandomAccessFile raf;
 
-    public Sverka(ArrayList<String> dList, JTabbedPane tabbPane, File file, File sverkaLog) {
-        this.dList = dList;
+    public Sverka(JTabbedPane tabbPane, File file, File sverkaLog) {
         this.tabbPane = tabbPane;
         this.file = file;
         this.sverkaLog = sverkaLog;
@@ -36,17 +34,16 @@ public class Sverka implements Action {
         }
         try {
             DomenReadActionChoose dm = new DomenExcel(file);
-            dm.choose();
             dm.action();
 
             this.tabbPane.removeAll();
-            this.dList = dm.getDomenName();
-            for (int t=0; t<this.dList.size(); t++){
+            ArrayList<String> domenList = dm.getDomenName();
+            for (int t = 0; t< domenList.size(); t++){
                 final ArrayList<String> vigruzka = new ArrayList<>();
                 final StringBuilder sb = new StringBuilder();
                 final StringBuilder erSps = new StringBuilder();
                 final String thisDom;
-                thisDom = this.dList.get(t);
+                thisDom = domenList.get(t);
                 ArrayList<String> firstCol = new ArrayList<>();
                 JPanel Glavnoe = new JPanel();
                 JButton myButton = new JButton("Сравнить списки");
@@ -96,14 +93,13 @@ public class Sverka implements Action {
                 Glavnoe.add(topPanel, BorderLayout.NORTH);
 
                 ReadFileChoose readFile = new ReadExcel(firstCol, thisDom, file);
-                readFile.choose();
                 readFile.read();
 
-                StringBuilder pol = new StringBuilder();
+                StringBuilder userFirstColumn = new StringBuilder();
                 for (String s : firstCol) {
-                    pol.append(s);
+                    userFirstColumn.append(s);
                 }
-                myText1.setText(pol.toString());
+                myText1.setText(userFirstColumn.toString());
                 myText1.setCaretPosition(0);
 
                 final int finalT = t;
@@ -165,7 +161,7 @@ public class Sverka implements Action {
                 scrFin.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
                 bottomPanel.add(scrFin);
 
-                tabbPane.addTab(dList.get(t), Glavnoe);
+                tabbPane.addTab(domenList.get(t), Glavnoe);
             }
         } catch (IOException e1) {
             e1.printStackTrace();

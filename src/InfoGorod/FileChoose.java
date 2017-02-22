@@ -6,13 +6,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class FileChoose implements Action {
-    private ArrayList<String> dList;
     private String computerName;
     private JTabbedPane tabbPane;
     private JFrame mainJFrame;
 
-    public FileChoose(ArrayList<String> dList, String computerName, JTabbedPane tabbPane, JFrame mainJFrame) {
-        this.dList = dList;
+    public FileChoose(String computerName, JTabbedPane tabbPane, JFrame mainJFrame) {
         this.computerName = computerName;
         this.tabbPane = tabbPane;
         this.mainJFrame = mainJFrame;
@@ -35,7 +33,7 @@ public class FileChoose implements Action {
                 }
                 this.mainJFrame.setTitle(logFile);
                 File sverkaLog = new File("SverkaLog_" + logFile + "_" + this.computerName + ".doc");
-                Action action = new Sverka(this.dList, this.tabbPane, file, sverkaLog);
+                Action action = new Sverka(this.tabbPane, file, sverkaLog);
                 action.action();
             } else {
                 JOptionPane.showMessageDialog(null,
